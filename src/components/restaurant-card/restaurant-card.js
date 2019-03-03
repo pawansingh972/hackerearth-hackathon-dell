@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import '../../App.css';
-
+    
 class RestaurantCard extends Component {
     getFormattedCuisines (cuisines) {
+      if (typeof cuisines === 'string' ) {
+        if (cuisines === "") return [];
+        cuisines = JSON.parse(cuisines);
+      }
       return cuisines.reduce((acc, curr, idx) => {
         return idx == 0 ? curr : (acc + ", " + curr);
       }, "");
@@ -10,12 +14,15 @@ class RestaurantCard extends Component {
   
     render () {
       const restaurantInfo = this.props.restaurantInfo;
-  
+      console.log(restaurantInfo);
       return (
         <div className="restaurant-card card text-center">
           <div className="card-body d-flex justify-content-between">
             <div className="d-flex card-left-wrapper">
-              <img className="restaurant-pic" src="https://via.placeholder.com/100" alt="Card image cap"/>
+              
+              <img className="restaurant-pic" 
+                    src={require('../../assets/restaurant-icon.png')} alt="Card image cap"/>
+
               <div className="d-flex flex-column justify-content-between">
                 <div className="d-flex flex-column">
                   <h5 className="restaurant-name card-title">{restaurantInfo.name}</h5>

@@ -45,17 +45,37 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 350px;
+  max-width: 320px;
   display: inline-block;
 }
 
 .srch-box {
-  margin: 20px;
-  width: 80%;
+  margin: 20px 0 20px 20px;
+  width: 60%;
   padding: .375rem .75rem;
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ced4da;
-  border-radius: .25rem;
+  border-bottom-left-radius: .25rem;
+  border-top-left-radius: .25rem;
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.srch-box-form .search-btn {
+  border-radius: 0;
+  position: relative;
+  top: -1px;
+  left: -2px;
+}
+.srch-box-form .reset-btn {
+  border-radius: 0;
+  position: relative;
+  top: -1px;
+  left: -2px;
+}
+
+.sort-by-chkbx {
+  width: 20px;
+  height: 20px;
+  margin: 3px 15px;
 }

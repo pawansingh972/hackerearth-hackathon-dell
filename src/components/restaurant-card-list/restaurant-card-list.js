@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import '../../App.css';
 
 import RestaurantCard from '../restaurant-card/restaurant-card';
+import SearchBar from '../search-form/search-form';
+import DataHandler from '../../DataHandler/data-handler';
 
 var sampleData = [
     {
@@ -46,16 +48,60 @@ var sampleData = [
   ];
 
 class RestaurantCardList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          restaurants: DataHandler.getAllData(),
+          isSearchResults: false
+        };
+    }
+
+    setRestaurantsState = (restaurants, isSearchResults) => {
+        this.setState(() => ({ restaurants, isSearchResults }));
+    }
+
     createCardsUI (data) {
+        if (!data.length) {
+            return(
+                    <h3> No Results Found! </h3>
+            )
+        }
         return data.map((item, idx) => {
-        return <RestaurantCard restaurantInfo={item} key={idx}/>
+            return <RestaurantCard restaurantInfo={item} key={idx}/>
         });
     }
+
+    onSubmitHandler (query, reset) {
+        let filteredData;
+        let isSearchResults = reset === true ? false: true;
+        if (query) {
+            filteredData = DataHandler.findByName(query);
+        } else {
+            filteredData = DataHandler.getAllData()
+        }
+        this.setRestaurantsState(filteredData, isSearchResults);
+    }
+
+    onSortHandler (sortOrder) {
+        let sortedData = this.state.restaurants.sort((a, b) => {
+            if (sortOrder === 'dsc') {
+                return b.rating - a.rating
+            }
+            return a.rating - b.rating
+        });
+        this.setRestaurantsState(sortedData, this.state.isSearchResults);
+    }
+
     render () {
         return (
-        <div className="restaurant-card-container d-flex flex-wrap justify-content-center">
-            {this.createCardsUI(sampleData)}
-        </div>
+            <div>
+                <SearchBar onSubmit={this.onSubmitHandler.bind(this)} 
+                           onSort={this.onSortHandler.bind(this)}/>
+                {this.state.isSearchResults && <h4 className=""> Searach Results! </h4>}
+                <div className="restaurant-card-container d-flex flex-wrap justify-content-center">
+                    {this.createCardsUI(this.state.restaurants)}
+                </div>
+            </div>
         )
     }
 }
